@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: saas-app
+  namespace: saas
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: saas
+  template:
+    metadata:
+      labels:
+        app: saas
+    spec:
+      containers:
+      - name: saas-app
+        image: yourdockerhub/saas-app:latest
+        ports:
+        - containerPort: 5000
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 5000
+          initialDelaySeconds: 5
+          periodSeconds: 10
