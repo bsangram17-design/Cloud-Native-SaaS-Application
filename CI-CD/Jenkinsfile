@@ -1,0 +1,27 @@
+pipeline {
+  agent any
+
+  environment {
+    IMAGE_NAME = "yourdockerhub/saas-app"
+  }
+
+  stages {
+    stage('Build') {
+      steps {
+        sh 'docker build -t $IMAGE_NAME .'
+      }
+    }
+
+    stage('Push') {
+      steps {
+        sh 'docker push $IMAGE_NAME'
+      }
+    }
+
+    stage('Deploy') {
+      steps {
+        sh 'kubectl apply -f k8s/'
+      }
+    }
+  }
+}
